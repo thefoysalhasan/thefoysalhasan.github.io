@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foysal Hasan — UI/UX Designer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Import Space Grotesk font */
+    @import url('https://fonts.googleapis.com/css?family=Space%20Grotesk:700|Space%20Grotesk:400');
+    
+    /* ===============================
+       BASE VARIABLES
+    ================================ */
+
+    :root {
+      font-family: Inter, sans-serif;
+
+      --stripe-color: #fff;
+
+      --text-light: #ffffff;
+      --text-dark: #000000;
+      --text-current: var(--text-dark);
+
+      --transition: 0.35s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--stripe-color);
+      color: var(--text-current);
+      transition: background var(--transition), color var(--transition);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===============================
+       BACKGROUND
+    ================================ */
+
+    @keyframes smoothBg {
+      from {
+        background-position: 50% 50%, 50% 50%;
+      }
+      to {
+        background-position: 350% 50%, 350% 50%;
+      }
+    }
+
+    .wrapper {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .hero {
+      position: absolute;
+      inset: 0;
+      min-height: 100vh;
+      width: 100%;
+
+      --stripes: repeating-linear-gradient(
+        100deg,
+        var(--stripe-color) 0%,
+        var(--stripe-color) 7%,
+        transparent 10%,
+        transparent 12%,
+        var(--stripe-color) 16%
+      );
+
+      --rainbow: repeating-linear-gradient(
+        100deg,
+        #60a5fa 10%,
+        #e879f9 15%,
+        #60a5fa 20%,
+        #5eead4 25%,
+        #60a5fa 30%
+      );
+
+      background-image: var(--stripes), var(--rainbow);
+      background-size: 300%, 200%;
+      filter: blur(10px) invert(100%);
+      mask-image: radial-gradient(ellipse at 100% 0%, black 40%, transparent 70%);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--stripes), var(--rainbow);
+      background-size: 200%, 100%;
+      animation: smoothBg 60s linear infinite;
+      mix-blend-mode: difference;
+    }
+
+    /* ===============================
+       CONTENT (CLEAN TEXT)
+    ================================ */
+
+    .content {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+
+      color: var(--text-current);
+      transition: color var(--transition);
+      padding: 20px;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 0.5rem;
+    }
+
+    .h1--scalingSize {
+      font-size: clamp(2rem, 8vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+
+    /* ===============================
+       THEME TOGGLE
+    ================================ */
+
+    #theme-toggle {
+      display: none;
+    }
+
+    .theme-switch {
+      position: fixed;
+      top: 1.5rem;
+      right: 5rem;
+      cursor: pointer;
+      z-index: 100;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+
+    .theme-switch:hover {
+      transform: rotate(15deg);
+    }
+
+    .theme-switch svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      transition: opacity var(--transition);
+    }
+
+    .icon-moon {
+      display: none;
+    }
+
+    /* ===============================
+       MUSIC TOGGLE BUTTON
+    ================================ */
+
+    .music-toggle-container {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+    }
+
+    #music-toggle {
+      display: none;
+    }
+
+    .music-switch {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      transition: all var(--transition);
+    }
+
+    .music-switch:hover {
+      transform: scale(1.1);
+    }
+
+    .music-switch i {
+      font-size: 1.3rem;
+      color: var(--text-current);
+      transition: color var(--transition);
+    }
+
+    /* Hide the mute icon by default */
+    .music-switch .fa-volume-mute {
+      display: none;
+    }
+
+    /* When music is toggled off, show mute icon and hide volume icon */
+    #music-toggle:checked ~ .music-toggle-container .music-switch .fa-volume-high {
+      display: none;
+    }
+    
+    #music-toggle:checked ~ .music-toggle-container .music-switch .fa-volume-mute {
+      display: block;
+    }
+
+    /* ===============================
+       RESUME BUTTON (20px TEXT SIZE)
+    ================================ */
+
+    /* Your original CSS for the button */
+    :root {
+      /* change this for scaling */
+      --m: 1.25rem; /* Adjusted for 20px equivalent */
+      
+      --red: #FF6565;
+      --pink: #FF64F9;
+      --purple: #6B5FFF;
+      --blue: #4D8AFF;
+      --green: #5BFF89;
+      --yellow: #FFEE55;
+      --orange: #FF6D1B;
+    }
+
+    .resume-button-container {
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      z-index: 3;
+    }
+
+    .resume-button {
+      border: calc(0.08 * var(--m)) solid transparent;
+      position: relative;
+      color: #F3F3F3;
+      font-family: 'Space Grotesk';
+      font-size: 20px; /* Fixed 20px size */
+      border-radius: calc(0.7 * var(--m));
+      padding: calc(0.5 * var(--m)) calc(1 * var(--m));
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+      
+      background:linear-gradient(#121213, #121213), linear-gradient(#121213 50%, rgba(18, 18, 19, 0.6) 80%, rgba(18, 18, 19, 0)),  linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
+      background-origin: border-box;
+      background-clip: padding-box, border-box, border-box;
+      background-size: 200%;
+      animation: animate 2s infinite linear;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .resume-button::before {
+      content: '';
+      background: linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
+      height: 30%;
+      width: 60%;
+      position: absolute;
+      bottom: -20%;
+      z-index: -5;
+      background-size: 200%;
+      animation: animate 2s infinite linear;
+      filter: blur(calc(0.8 * var(--m)));
+    }
+
+    .resume-button:hover, .resume-button:hover::before {
+      animation: animate 0.5s infinite linear;
+    }
+
+    @keyframes animate {
+      0% {background-position: 0}
+      100% {background-position: 200%}
+    }
+
+    @media screen and (max-width: 1000px) {
+      :root {
+        --m: 1.1rem;
+      }
+      
+      .resume-button {
+        font-size: 18px;
+      }
+    }
+
+    /* ===============================
+       FOOTER SECTION (TRANSPARENT)
+    ================================ */
+
+    .footer-section {
+      position: relative;
+      color: var(--text-current);
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+      z-index: 1;
+      transition: color var(--transition);
+      background: transparent !important;
+    }
+
+    .footer-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .footer-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+
+    /* Email with shaky animation */
+    @keyframes shaky {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+      20%, 40%, 60%, 80% { transform: translateX(2px); }
+    }
+
+    .footer-email {
+      font-size: 32px; /* 32px text size */
+      font-weight: 600;
+      margin-bottom: 2rem;
+      color: var(--text-current);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+      animation: shaky 3s ease-in-out infinite;
+    }
+
+    .footer-email:hover {
+      animation: shaky 0.5s ease-in-out infinite;
+      opacity: 0.9;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-current);
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      border: 1.5px solid currentColor;
+      background: transparent !important;
+    }
+
+    .social-icon:hover {
+      transform: translateY(-5px);
+      color: var(--text-current);
+    }
+
+    /* ===============================
+       DARK MODE
+    ================================ */
+
+    :has(#theme-toggle:checked) {
+      --stripe-color: #000;
+      --text-current: var(--text-light);
+    }
+
+    :has(#theme-toggle:checked) .icon-sun {
+      display: none;
+    }
+
+    :has(#theme-toggle:checked) .icon-moon {
+      display: block;
+    }
+
+    :has(#theme-toggle:checked) .hero,
+    :has(#theme-toggle:checked) .hero::after {
+      filter: blur(10px) opacity(55%) saturate(200%);
+    }
+
+    /* Responsive adjustments */
+    @media screen and (max-width: 768px) {
+      .theme-switch {
+        top: 1rem;
+        right: 4rem;
+      }
+      
+      .music-toggle-container {
+        top: 1rem;
+        right: 1rem;
+      }
+      
+      .h1--scalingSize {
+        font-size: clamp(1.8rem, 7vw, 3.5rem);
+      }
+      
+      .footer-section {
+        padding: 2.5rem 1.5rem 1.5rem;
+      }
+      
+      .footer-text {
+        font-size: 1rem;
+      }
+      
+      .footer-email {
+        font-size: 24px; /* Smaller on mobile */
+        animation: shaky 4s ease-in-out infinite;
+      }
+      
+      .footer-email:hover {
+        animation: shaky 0.6s ease-in-out infinite;
+      }
+      
+      .social-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+      }
+      
+      .resume-button {
+        font-size: 16px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      :root {
+        --m: 1rem;
+      }
+      
+      .social-icons {
+        gap: 1rem;
+      }
+      
+      .social-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+      }
+      
+      .footer-email {
+        font-size: 20px;
+      }
+      
+      .resume-button {
+        font-size: 14px;
+        padding: 12px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Music Toggle -->
+<input type="checkbox" id="music-toggle" checked />
+<div class="music-toggle-container">
+  <label for="music-toggle" class="music-switch" aria-label="Toggle music">
+    <i class="fas fa-volume-high"></i>
+    <i class="fas fa-volume-mute"></i>
+  </label>
+</div>
+
+<!-- Theme Toggle -->
+<input type="checkbox" id="theme-toggle" />
+<label for="theme-toggle" class="theme-switch" aria-label="Toggle theme">
+  <!-- Sun (outline) -->
+  <svg class="icon-sun" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="4"></line>
+    <line x1="12" y1="20" x2="12" y2="23"></line>
+    <line x1="1" y1="12" x2="4" y2="12"></line>
+    <line x1="20" y1="12" x2="23" y2="12"></line>
+    <line x1="4.2" y1="4.2" x2="6.3" y2="6.3"></line>
+    <line x1="17.7" y1="17.7" x2="19.8" y2="19.8"></line>
+    <line x1="4.2" y1="19.8" x2="6.3" y2="17.7"></line>
+    <line x1="17.7" y1="6.3" x2="19.8" y2="4.2"></line>
+  </svg>
+
+  <!-- Moon (outline) -->
+  <svg class="icon-moon" viewBox="0 0 24 24">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3
+             7 7 0 0 0 21 12.8z"></path>
+  </svg>
+</label>
+
+<section class="wrapper">
+  <div class="hero" aria-hidden="true"></div>
+
+  <div class="content">
+    <span class="hero-eyebrow">Hi, I'm Foysal</span>
+
+    <h1 class="h1--scalingSize">
+      UI/UX Designer
+    </h1>
+
+    <!-- Resume Button (20px text size) -->
+    <div class="resume-button-container">
+      <a href="resume.pdf" target="_blank" class="resume-button">
+        Resume Download
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer Section (TRANSPARENT) -->
+<section class="footer-section">
+  <div class="footer-content">
+    <p class="footer-text">Have an idea or just want to connect?</p>
+    <a href="mailto:foysalhasan12780@gmail.com" class="footer-email">foysalhasan12780@gmail.com</a>
+    
+    <div class="social-icons">
+      <a href="https://www.linkedin.com/in/thefoysalhasan/" target="_blank" class="social-icon" aria-label="LinkedIn">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+      <a href="https://www.instagram.com/thefoysalhasan/" target="_blank" class="social-icon" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.behance.net/thefoysalhasan" target="_blank" class="social-icon" aria-label="Behance">
+        <i class="fab fa-behance"></i>
+      </a>
+      <a href="https://dribbble.com/thefoysalhasan" target="_blank" class="social-icon" aria-label="Dribbble">
+        <i class="fab fa-dribbble"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Audio element for background music -->
+<audio id="background-music" loop>
+  <source src="https://assets.codepen.io/1468070/Happy+Whistling.mp3" type="audio/mpeg">
+  <source src="https://assets.codepen.io/1468070/Happy+Whistling.ogg" type="audio/ogg">
+  Your browser does not support the audio element.
+</audio>
+
+<script>
+  // Music toggle functionality
+  const musicToggle = document.getElementById('music-toggle');
+  const backgroundMusic = document.getElementById('background-music');
+  
+  // Set volume to a pleasant level
+  backgroundMusic.volume = 0.3;
+  
+  // Function to handle audio playback
+  function initAudio() {
+    // Try to autoplay the music when page loads
+    const playPromise = backgroundMusic.play();
+    
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        // Autoplay succeeded
+        musicToggle.checked = true;
+      }).catch(error => {
+        // Autoplay failed, wait for user interaction
+        console.log("Autoplay prevented. Waiting for user interaction.");
+        musicToggle.checked = false;
+        
+        // Enable play on first user interaction
+        const enableAudio = () => {
+          if (!musicToggle.checked) {
+            backgroundMusic.play().then(() => {
+              musicToggle.checked = true;
+            }).catch(e => {
+              console.log("Playback still prevented");
+            });
+          }
+          // Remove listeners after first click
+          document.removeEventListener('click', enableAudio);
+          document.removeEventListener('keydown', enableAudio);
+        };
+        
+        // Listen for click or keydown events
+        document.addEventListener('click', enableAudio);
+        document.addEventListener('keydown', enableAudio);
+      });
+    }
+  }
+  
+  // Initialize audio when page loads
+  document.addEventListener('DOMContentLoaded', initAudio);
+  
+  // Toggle music on checkbox change
+  musicToggle.addEventListener('change', function() {
+    if (this.checked) {
+      backgroundMusic.play().catch(e => {
+        console.log("Playback failed:", e);
+        this.checked = false;
+      });
+    } else {
+      backgroundMusic.pause();
+    }
+  });
+  
+  // Theme toggle functionality with localStorage
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  // Check for saved theme preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    themeToggle.checked = true;
+  } else if (savedTheme === 'light') {
+    themeToggle.checked = false;
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    // If no saved preference, check system preference
+    themeToggle.checked = true;
+  }
+
+  // Save theme preference
+  themeToggle.addEventListener('change', function() {
+    if (this.checked) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script>
+
+</body>
+</html>
