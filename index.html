@@ -173,55 +173,6 @@
     }
 
     /* ===============================
-       MUSIC TOGGLE BUTTON
-    ================================ */
-
-    .music-toggle-container {
-      position: fixed;
-      top: 1.5rem;
-      right: 1.5rem;
-      z-index: 100;
-    }
-
-    #music-toggle {
-      display: none;
-    }
-
-    .music-switch {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      transition: all var(--transition);
-    }
-
-    .music-switch:hover {
-      transform: scale(1.1);
-    }
-
-    .music-switch i {
-      font-size: 1.3rem;
-      color: var(--text-current);
-      transition: color var(--transition);
-    }
-
-    /* Hide the mute icon by default */
-    .music-switch .fa-volume-mute {
-      display: none;
-    }
-
-    /* When music is toggled off, show mute icon and hide volume icon */
-    #music-toggle:checked ~ .music-toggle-container .music-switch .fa-volume-high {
-      display: none;
-    }
-    
-    #music-toggle:checked ~ .music-toggle-container .music-switch .fa-volume-mute {
-      display: block;
-    }
-
-    /* ===============================
        RESUME BUTTON (20px TEXT SIZE)
     ================================ */
 
@@ -469,14 +420,7 @@
 </head>
 <body>
 
-<!-- Music Toggle -->
-<input type="checkbox" id="music-toggle" checked />
-<div class="music-toggle-container">
-  <label for="music-toggle" class="music-switch" aria-label="Toggle music">
-    <i class="fas fa-volume-high"></i>
-    <i class="fas fa-volume-mute"></i>
-  </label>
-</div>
+
 
 <!-- Theme Toggle -->
 <input type="checkbox" id="theme-toggle" />
@@ -635,3 +579,4 @@
 </body>
 
 </html>
+
