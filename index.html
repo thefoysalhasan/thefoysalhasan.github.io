@@ -144,7 +144,7 @@
     .theme-switch {
       position: fixed;
       top: 1.5rem;
-      right: 5rem;
+      right: 1.5rem;
       cursor: pointer;
       z-index: 100;
       width: 48px;
@@ -352,11 +352,6 @@
     @media screen and (max-width: 768px) {
       .theme-switch {
         top: 1rem;
-        right: 4rem;
-      }
-      
-      .music-toggle-container {
-        top: 1rem;
         right: 1rem;
       }
       
@@ -420,9 +415,7 @@
 </head>
 <body>
 
-
-
-<!-- Theme Toggle -->
+<!-- Theme Toggle Button -->
 <input type="checkbox" id="theme-toggle" />
 <label for="theme-toggle" class="theme-switch" aria-label="Toggle theme">
   <!-- Sun (outline) -->
@@ -455,104 +448,44 @@
       UI/UX Designer
     </h1>
 
-    <!-- Resume Button (20px text size) -->
+    <!-- Resume Button -->
     <div class="resume-button-container">
-      <a href="Foysal Hasan.pdf" target="_blank" class="resume-button">
+      <a href="resume.pdf" target="_blank" class="resume-button">
         Resume Download
       </a>
     </div>
   </div>
 </section>
 
-<!-- Footer Section (TRANSPARENT) -->
+<!-- Footer Section -->
 <section class="footer-section">
   <div class="footer-content">
     <p class="footer-text">Have an idea or just want to connect?</p>
     <a href="mailto:foysalhasan12780@gmail.com" class="footer-email">foysalhasan12780@gmail.com</a>
     
     <div class="social-icons">
-      <a href="https://www.linkedin.com/in/thefoysalhasan/" target="_blank" class="social-icon" aria-label="LinkedIn">
+      <a href="https://linkedin.com/in/foysalhasan" target="_blank" class="social-icon" aria-label="LinkedIn">
         <i class="fab fa-linkedin-in"></i>
       </a>
-      <a href="https://www.instagram.com/thefoysalhasan/" target="_blank" class="social-icon" aria-label="Instagram">
+      <a href="https://instagram.com/foysalhasan" target="_blank" class="social-icon" aria-label="Instagram">
         <i class="fab fa-instagram"></i>
       </a>
-      <a href="https://www.behance.net/thefoysalhasan" target="_blank" class="social-icon" aria-label="Behance">
+      <a href="https://behance.net/foysalhasan" target="_blank" class="social-icon" aria-label="Behance">
         <i class="fab fa-behance"></i>
       </a>
-      <a href="https://dribbble.com/thefoysalhasan" target="_blank" class="social-icon" aria-label="Dribbble">
+      <a href="https://dribbble.com/foysalhasan" target="_blank" class="social-icon" aria-label="Dribbble">
         <i class="fab fa-dribbble"></i>
       </a>
     </div>
   </div>
 </section>
 
-<!-- Audio element for background music -->
-<audio id="background-music" loop>
-  <source src="https://assets.codepen.io/1468070/Scissor Seven.mp3" type="audio/mpeg">
-  <source src="https://assets.codepen.io/1468070/Scissor Seven.ogg" type="audio/ogg">
-  Your browser does not support the audio element.
-</audio>
-
 <script>
-  // Music toggle functionality
-  const musicToggle = document.getElementById('music-toggle');
-  const backgroundMusic = document.getElementById('background-music');
-  
-  // Set volume to a pleasant level
-  backgroundMusic.volume = 0.3;
-  
-  // Function to handle audio playback
-  function initAudio() {
-    // Try to autoplay the music when page loads
-    const playPromise = backgroundMusic.play();
-    
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        // Autoplay succeeded
-        musicToggle.checked = true;
-      }).catch(error => {
-        // Autoplay failed, wait for user interaction
-        console.log("Autoplay prevented. Waiting for user interaction.");
-        musicToggle.checked = false;
-        
-        // Enable play on first user interaction
-        const enableAudio = () => {
-          if (!musicToggle.checked) {
-            backgroundMusic.play().then(() => {
-              musicToggle.checked = true;
-            }).catch(e => {
-              console.log("Playback still prevented");
-            });
-          }
-          // Remove listeners after first click
-          document.removeEventListener('click', enableAudio);
-          document.removeEventListener('keydown', enableAudio);
-        };
-        
-        // Listen for click or keydown events
-        document.addEventListener('click', enableAudio);
-        document.addEventListener('keydown', enableAudio);
-      });
-    }
-  }
-  
-  // Initialize audio when page loads
-  document.addEventListener('DOMContentLoaded', initAudio);
-  
-  // Toggle music on checkbox change
-  musicToggle.addEventListener('change', function() {
-    if (this.checked) {
-      backgroundMusic.play().catch(e => {
-        console.log("Playback failed:", e);
-        this.checked = false;
-      });
-    } else {
-      backgroundMusic.pause();
-    }
-  });
-  
-  // Theme toggle functionality with localStorage
+  // ===============================
+  // JAVASCRIPT CODE
+  // ===============================
+
+  // 1. THEME TOGGLE FUNCTIONALITY
   const themeToggle = document.getElementById('theme-toggle');
   
   // Check for saved theme preference
@@ -574,9 +507,72 @@
       localStorage.setItem('theme', 'light');
     }
   });
+
+  // 2. SMOOTH SCROLLING FOR ANCHOR LINKS (if added later)
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const targetId = this.getAttribute('href');
+      if(targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if(targetElement) {
+        window.scrollTo({
+          top: targetElement.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+
+  // 3. ADD HOVER EFFECT TO RESUME BUTTON
+  const resumeButton = document.querySelector('.resume-button');
+  if (resumeButton) {
+    resumeButton.addEventListener('mouseenter', () => {
+      resumeButton.style.transform = 'translateY(-3px)';
+    });
+    
+    resumeButton.addEventListener('mouseleave', () => {
+      resumeButton.style.transform = 'translateY(0)';
+    });
+  }
+
+  // 4. PERFORMANCE OPTIMIZATION
+  // Debounce scroll events for better performance
+  let scrollTimer;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      // Any scroll-based functionality can go here
+    }, 100);
+  });
+
+  // 5. ERROR HANDLING
+  window.addEventListener('error', (event) => {
+    console.log('JavaScript Error:', event.message);
+  });
+
+  // 6. RESPONSIVE BEHAVIOR
+  // Update layout on window resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      // Any responsive adjustments can go here
+    }, 250);
+  });
+
+  // 7. VISIBILITY CHANGE HANDLER
+  // For any future animations that need to pause when tab is not visible
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      // Pause any animations if needed in the future
+    } else {
+      // Resume any animations if needed in the future
+    }
+  });
 </script>
 
 </body>
-
 </html>
-
