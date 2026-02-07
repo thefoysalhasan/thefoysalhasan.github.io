@@ -240,14 +240,134 @@
       100% {background-position: 200%}
     }
 
-    @media screen and (max-width: 1000px) {
-      :root {
-        --m: 1.1rem;
-      }
-      
-      .resume-button {
-        font-size: 18px;
-      }
+    /* ===============================
+       PROJECTS SECTION (UPDATED WITH CTA BUTTONS)
+    ================================ */
+    .portfolio-section {
+      position: relative;
+      z-index: 2;
+      background: transparent;
+      color: var(--text-current);
+      padding: 80px 20px;
+      transition: color var(--transition);
+    }
+
+    .portfolio-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .portfolio-tag {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #8300fd;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .portfolio-title {
+      font-size: 42px;
+      margin: 0 0 50px;
+      line-height: 1.2;
+      font-weight: 700;
+      color: var(--text-current);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      margin-top: 30px;
+    }
+
+    .project-card {
+      background: transparent;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    /* Dark mode border adjustment */
+    :has(#theme-toggle:checked) .project-card {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    :has(#theme-toggle:checked) .project-card:hover {
+      box-shadow: 0 20px 40px rgba(255, 255, 255, 0.05);
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .project-content {
+      text-align: left;
+      padding: 24px;
+      background: transparent;
+    }
+
+    .project-content h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: var(--text-current);
+      font-weight: 600;
+    }
+
+    .project-content p {
+      font-size: 14px;
+      color: var(--text-current);
+      opacity: 0.8;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* Updated CTA Buttons */
+    .project-cta-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .cta-button {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .cta-primary {
+      background: var(--text-current);
+      color: var(--stripe-color);
+    }
+
+    .cta-secondary {
+      background: transparent;
+      color: var(--text-current);
+      border: 1.5px solid var(--text-current);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
     }
 
     /* ===============================
@@ -348,7 +468,28 @@
       filter: blur(10px) opacity(55%) saturate(200%);
     }
 
-    /* Responsive adjustments */
+    /* ===============================
+       RESPONSIVE ADJUSTMENTS
+    ================================ */
+
+    @media screen and (max-width: 1000px) {
+      :root {
+        --m: 1.1rem;
+      }
+      
+      .resume-button {
+        font-size: 18px;
+      }
+      
+      .portfolio-grid {
+        gap: 30px;
+      }
+      
+      .project-card img {
+        height: 220px;
+      }
+    }
+
     @media screen and (max-width: 768px) {
       .theme-switch {
         top: 1rem;
@@ -359,6 +500,35 @@
         font-size: clamp(1.8rem, 7vw, 3.5rem);
       }
       
+      /* Projects section responsive */
+      .portfolio-section {
+        padding: 60px 20px;
+      }
+      
+      .portfolio-title {
+        font-size: 32px;
+        margin-bottom: 40px;
+      }
+      
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      
+      .project-card img {
+        height: 200px;
+      }
+      
+      .project-cta-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .cta-button {
+        width: 100%;
+      }
+      
+      /* Footer responsive */
       .footer-section {
         padding: 2.5rem 1.5rem 1.5rem;
       }
@@ -368,7 +538,7 @@
       }
       
       .footer-email {
-        font-size: 24px; /* Smaller on mobile */
+        font-size: 24px;
         animation: shaky 4s ease-in-out infinite;
       }
       
@@ -390,6 +560,18 @@
     @media screen and (max-width: 480px) {
       :root {
         --m: 1rem;
+      }
+      
+      .portfolio-title {
+        font-size: 28px;
+      }
+      
+      .project-content {
+        padding: 20px;
+      }
+      
+      .project-content h3 {
+        font-size: 18px;
       }
       
       .social-icons {
@@ -457,6 +639,78 @@
   </div>
 </section>
 
+<!-- ===============================
+   PROJECTS SECTION (UPDATED WITH CTA BUTTONS)
+=============================== -->
+
+<section class="portfolio-section">
+  <div class="portfolio-container">
+    <span class="portfolio-tag">MY PORTFOLIO</span>
+    <h1 class="portfolio-title">Latest Projects</h1>
+
+<div class="portfolio-grid">
+  <!-- Project 1 - Dental Landing Page -->
+  <div class="project-card">
+    <img src="Dental Services.jpg" alt="Dental Services Landing Page UI Design">
+    <div class="project-content">
+      <h3>Dental Services Landing Page UI Design</h3>
+      <p>
+        A modern and responsive dental clinic landing page designed to build trust, improve user experience, and increase appointment conversions.
+      </p>
+      <div class="project-cta-buttons">
+        <a href="https://thefoysalhasan.github.io/brightsmile.github.io/" target="_blank" class="cta-button cta-primary">Live Preview</a>
+        <a href="https://www.behance.net/gallery/243571695/Dental-Services-Landing-Page-UI-Design" target="_blank" class="cta-button cta-secondary">View Project</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project 2 --->
+  <div class="project-card">
+    <img src="cooming soon.jpg" alt="E-commerce Mobile App">
+    <div class="project-content">
+      <h3>Cooming Soon</h3>
+      <p>
+        Cooming Soon
+      </p>
+      <div class="project-cta-buttons">
+        <a href="link here" target="_blank" class="cta-button cta-primary">Live Preview</a>
+        <a href="link here" target="_blank" class="cta-button cta-secondary">View Project</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project 3 --->
+  <div class="project-card">
+    <img src="cooming soon.jpg" alt="SaaS Dashboard Interface">
+    <div class="project-content">
+      <h3>Cooming Soon</h3>
+      <p>
+        Cooming Soon
+      </p>
+      <div class="project-cta-buttons">
+        <a href="link here" target="_blank" class="cta-button cta-primary">Live Preview</a>
+        <a href="link here" target="_blank" class="cta-button cta-secondary">View Project</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project 4 --->
+  <div class="project-card">
+    <img src="cooming soon.jpg" alt="Design System">
+    <div class="project-content">
+      <h3>Cooming Soon</h3>
+      <p>
+        Cooming Soon
+      </p>
+      <div class="project-cta-buttons">
+        <a href="link here" target="_blank" class="cta-button cta-primary">Live Preview</a>
+        <a href="link here" target="_blank" class="cta-button cta-secondary">View Project</a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
 <!-- Footer Section -->
 <section class="footer-section">
   <div class="footer-content">
@@ -464,16 +718,16 @@
     <a href="mailto:foysalhasan12780@gmail.com" class="footer-email">foysalhasan12780@gmail.com</a>
     
     <div class="social-icons">
-      <a href="https://linkedin.com/in/foysalhasan" target="_blank" class="social-icon" aria-label="LinkedIn">
+      <a href="https://linkedin.com/in/thefoysalhasan" target="_blank" class="social-icon" aria-label="LinkedIn">
         <i class="fab fa-linkedin-in"></i>
       </a>
-      <a href="https://instagram.com/foysalhasan" target="_blank" class="social-icon" aria-label="Instagram">
+      <a href="https://instagram.com/thefoysalhasan" target="_blank" class="social-icon" aria-label="Instagram">
         <i class="fab fa-instagram"></i>
       </a>
-      <a href="https://behance.net/foysalhasan" target="_blank" class="social-icon" aria-label="Behance">
+      <a href="https://behance.net/thefoysalhasan" target="_blank" class="social-icon" aria-label="Behance">
         <i class="fab fa-behance"></i>
       </a>
-      <a href="https://dribbble.com/foysalhasan" target="_blank" class="social-icon" aria-label="Dribbble">
+      <a href="https://dribbble.com/thefoysalhasan" target="_blank" class="social-icon" aria-label="Dribbble">
         <i class="fab fa-dribbble"></i>
       </a>
     </div>
@@ -481,52 +735,63 @@
 </section>
 
 <script>
-  // ===============================
-  // JAVASCRIPT CODE
-  // ===============================
+// ===============================
+// JAVASCRIPT CODE
+// ===============================
 
-  // 1. THEME TOGGLE FUNCTIONALITY
-  const themeToggle = document.getElementById('theme-toggle');
-  
-  // Check for saved theme preference
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    themeToggle.checked = true;
-  } else if (savedTheme === 'light') {
-    themeToggle.checked = false;
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    // If no saved preference, check system preference
-    themeToggle.checked = true;
+// 1. THEME TOGGLE FUNCTIONALITY
+const themeToggle = document.getElementById('theme-toggle');
+
+// Check for saved theme preference
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+  themeToggle.checked = true;
+} else if (savedTheme === 'light') {
+  themeToggle.checked = false;
+} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  themeToggle.checked = true;
+}
+
+// Save theme preference
+themeToggle.addEventListener('change', function() {
+  if (this.checked) {
+    localStorage.setItem('theme', 'dark');
+  } else {
+    localStorage.setItem('theme', 'light');
   }
+});
 
-  // Save theme preference
-  themeToggle.addEventListener('change', function() {
-    if (this.checked) {
-      localStorage.setItem('theme', 'dark');
-    } else {
-      localStorage.setItem('theme', 'light');
+// 2. SMOOTH SCROLLING FOR ANCHOR LINKS
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const targetId = this.getAttribute('href');
+    if(targetId === '#') return;
+    
+    const targetElement = document.querySelector(targetId);
+    if(targetElement) {
+      window.scrollTo({
+        top: targetElement.offsetTop - 80,
+        behavior: 'smooth'
+      });
     }
   });
+});
 
-  // 2. SMOOTH SCROLLING FOR ANCHOR LINKS (if added later)
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const targetId = this.getAttribute('href');
-      if(targetId === '#') return;
-      
-      const targetElement = document.querySelector(targetId);
-      if(targetElement) {
-        window.scrollTo({
-          top: targetElement.offsetTop - 80,
-          behavior: 'smooth'
-        });
-      }
-    });
+// 3. ADD HOVER EFFECT TO RESUME BUTTON
+const resumeButton = document.querySelector('.resume-button');
+if (resumeButton) {
+  resumeButton.addEventListener('mouseenter', () => {
+    resumeButton.style.transform = 'translateY(-3px)';
   });
+  
+  resumeButton.addEventListener('mouseleave', () => {
+    resumeButton.style.transform = 'translateY(0)';
+  });
+}
 
-  // 3. ADD HOVER EFFECT TO RESUME BUTTON
+  // 4. ADD HOVER EFFECT TO RESUME BUTTON
   const resumeButton = document.querySelector('.resume-button');
   if (resumeButton) {
     resumeButton.addEventListener('mouseenter', () => {
@@ -538,8 +803,7 @@
     });
   }
 
-  // 4. PERFORMANCE OPTIMIZATION
-  // Debounce scroll events for better performance
+  // 5. PERFORMANCE OPTIMIZATION
   let scrollTimer;
   window.addEventListener('scroll', () => {
     clearTimeout(scrollTimer);
@@ -548,13 +812,12 @@
     }, 100);
   });
 
-  // 5. ERROR HANDLING
+  // 6. ERROR HANDLING
   window.addEventListener('error', (event) => {
     console.log('JavaScript Error:', event.message);
   });
 
-  // 6. RESPONSIVE BEHAVIOR
-  // Update layout on window resize
+  // 7. RESPONSIVE BEHAVIOR
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
@@ -563,8 +826,7 @@
     }, 250);
   });
 
-  // 7. VISIBILITY CHANGE HANDLER
-  // For any future animations that need to pause when tab is not visible
+  // 8. VISIBILITY CHANGE HANDLER
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       // Pause any animations if needed in the future
@@ -576,5 +838,3 @@
 
 </body>
 </html>
-
-
