@@ -1,840 +1,1050 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foysal Hasan — UI/UX Designer</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* Import Space Grotesk font */
-    @import url('https://fonts.googleapis.com/css?family=Space%20Grotesk:700|Space%20Grotesk:400');
-    
-    /* ===============================
-       BASE VARIABLES
-    ================================ */
 
+    /* =====================
+       VARIABLES
+    ===================== */
     :root {
-      font-family: Inter, sans-serif;
-
-      --stripe-color: #fff;
-
-      --text-light: #ffffff;
-      --text-dark: #000000;
-      --text-current: var(--text-dark);
-
+      --bg: #ffffff;
+      --fg: #0d0d0d;
+      --fg-muted: rgba(13,13,13,0.5);
+      --accent: #8300fd;
+      --card-bg: rgba(255,255,255,0.55);
+      --card-border: rgba(0,0,0,0.08);
+      --nav-bg: rgba(255,255,255,0.6);
+      --nav-border: rgba(0,0,0,0.08);
       --transition: 0.35s ease;
+
+      --orange: #FF6D1B;
+      --yellow: #FFEE55;
+      --green: #5BFF89;
+      --blue: #4D8AFF;
+      --purple: #6B5FFF;
+      --pink: #FF64F9;
+      --red: #FF6565;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    [data-theme="dark"] {
+      --bg: #080808;
+      --fg: #f0ece4;
+      --fg-muted: rgba(240,236,228,0.45);
+      --card-bg: rgba(18,18,18,0.7);
+      --card-border: rgba(255,255,255,0.09);
+      --nav-bg: rgba(8,8,8,0.65);
+      --nav-border: rgba(255,255,255,0.08);
     }
+
+    /* =====================
+       RESET
+    ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
-      background: var(--stripe-color);
-      color: var(--text-current);
-      transition: background var(--transition), color var(--transition);
-      min-height: 100vh;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Plus Jakarta Sans', sans-serif;
       overflow-x: hidden;
+      transition: background var(--transition), color var(--transition);
+      cursor: none;
     }
 
-    /* ===============================
-       BACKGROUND
-    ================================ */
+    /* =====================
+       CUSTOM CURSOR
+    ===================== */
+    #cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      left: -20px; top: -20px;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s ease, height 0.25s ease;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 34px; height: 34px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      left: -20px; top: -20px;
+      transform: translate(-50%, -50%);
+      opacity: 0.5;
+      transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    }
+    body.hov #cursor { width: 14px; height: 14px; }
+    body.hov #cursor-ring { width: 52px; height: 52px; opacity: 0.15; background: var(--accent); }
 
-    @keyframes smoothBg {
-      from {
-        background-position: 50% 50%, 50% 50%;
-      }
-      to {
-        background-position: 350% 50%, 350% 50%;
-      }
+    /* =====================
+       SCROLL PROGRESS
+    ===================== */
+    #scroll-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--pink), var(--orange));
+      z-index: 9990;
     }
 
-    .wrapper {
+    /* =====================
+       NAVBAR
+    ===================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 800;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 2rem;
+      padding: 0.9rem 2.5rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid var(--nav-border);
+      box-shadow: 0 1px 24px rgba(0,0,0,0.06);
+      transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+    nav.scrolled {
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      box-shadow: 0 2px 32px rgba(0,0,0,0.1);
+    }
+    [data-theme="dark"] nav.scrolled {
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--fg-muted);
+      text-decoration: none;
       position: relative;
-      min-height: 100vh;
-      width: 100%;
+      transition: color 0.3s;
     }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a:hover::after { width: 100%; }
 
+    .theme-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--fg);
+      cursor: none;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .theme-btn:hover { border-color: var(--accent); transform: rotate(18deg) scale(1.05); }
+    .theme-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+    .icon-moon { display: none; }
+    [data-theme="dark"] .icon-sun  { display: none; }
+    [data-theme="dark"] .icon-moon { display: block; }
+
+    /* =====================
+       HERO
+    ===================== */
     .hero {
-      position: absolute;
-      inset: 0;
-      min-height: 100vh;
-      width: 100%;
-
-      --stripes: repeating-linear-gradient(
-        100deg,
-        var(--stripe-color) 0%,
-        var(--stripe-color) 7%,
-        transparent 10%,
-        transparent 12%,
-        var(--stripe-color) 16%
-      );
-
-      --rainbow: repeating-linear-gradient(
-        100deg,
-        #60a5fa 10%,
-        #e879f9 15%,
-        #60a5fa 20%,
-        #5eead4 25%,
-        #60a5fa 30%
-      );
-
-      background-image: var(--stripes), var(--rainbow);
-      background-size: 300%, 200%;
-      filter: blur(10px) invert(100%);
-      mask-image: radial-gradient(ellipse at 100% 0%, black 40%, transparent 70%);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: var(--stripes), var(--rainbow);
-      background-size: 200%, 100%;
-      animation: smoothBg 60s linear infinite;
-      mix-blend-mode: difference;
-    }
-
-    /* ===============================
-       CONTENT (CLEAN TEXT)
-    ================================ */
-
-    .content {
       position: relative;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       text-align: center;
-      gap: 1rem;
-
-      color: var(--text-current);
-      transition: color var(--transition);
-      padding: 20px;
-      z-index: 2;
+      padding: 120px 20px 80px;
+      overflow: hidden;
     }
 
-    .hero-eyebrow {
-      font-size: 0.85rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      opacity: 0.75;
-      margin-bottom: 0.5rem;
+    /* aurora — original style */
+    .aurora {
+      position: absolute;
+      inset: 0;
+      --stripes: repeating-linear-gradient(100deg, #fff 0%, #fff 7%, transparent 10%, transparent 12%, #fff 16%);
+      --rainbow: repeating-linear-gradient(100deg, #60a5fa 10%, #e879f9 15%, #60a5fa 20%, #5eead4 25%, #60a5fa 30%);
+      background-image: var(--stripes), var(--rainbow);
+      background-size: 300%, 200%;
+      filter: blur(10px) invert(100%);
+      mask-image: radial-gradient(ellipse at 100% 0%, black 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .aurora::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: var(--stripes), var(--rainbow);
+      background-size: 200%, 100%;
+      animation: auroraBg 60s linear infinite;
+      mix-blend-mode: difference;
+    }
+    [data-theme="dark"] .aurora {
+      --stripes: repeating-linear-gradient(100deg, #000 0%, #000 7%, transparent 10%, transparent 12%, #000 16%);
+      filter: blur(10px) opacity(55%) saturate(200%);
+    }
+    @keyframes auroraBg {
+      from { background-position: 50% 50%, 50% 50%; }
+      to   { background-position: 350% 50%, 350% 50%; }
     }
 
-    .h1--scalingSize {
-      font-size: clamp(2rem, 8vw, 4.5rem);
-      font-weight: 700;
-      line-height: 1.1;
-      margin-bottom: 2rem;
-    }
-
-    /* ===============================
-       THEME TOGGLE
-    ================================ */
-
-    #theme-toggle {
-      display: none;
-    }
-
-    .theme-switch {
-      position: fixed;
-      top: 1.5rem;
-      right: 1.5rem;
-      cursor: pointer;
-      z-index: 100;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all var(--transition);
-    }
-
-    .theme-switch:hover {
-      transform: rotate(15deg);
-    }
-
-    .theme-switch svg {
-      width: 24px;
-      height: 24px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.8;
-      transition: opacity var(--transition);
-    }
-
-    .icon-moon {
-      display: none;
-    }
-
-    /* ===============================
-       RESUME BUTTON (20px TEXT SIZE)
-    ================================ */
-
-    /* Your original CSS for the button */
-    :root {
-      /* change this for scaling */
-      --m: 1.25rem; /* Adjusted for 20px equivalent */
-      
-      --red: #FF6565;
-      --pink: #FF64F9;
-      --purple: #6B5FFF;
-      --blue: #4D8AFF;
-      --green: #5BFF89;
-      --yellow: #FFEE55;
-      --orange: #FF6D1B;
-    }
-
-    .resume-button-container {
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      z-index: 3;
-    }
-
-    .resume-button {
-      border: calc(0.08 * var(--m)) solid transparent;
+    .hero-inner {
       position: relative;
-      color: #F3F3F3;
-      font-family: 'Space Grotesk';
-      font-size: 20px; /* Fixed 20px size */
-      border-radius: calc(0.7 * var(--m));
-      padding: calc(0.5 * var(--m)) calc(1 * var(--m));
+      z-index: 2;
       display: flex;
-      justify-content: center;
-      cursor: pointer;
-      
-      background:linear-gradient(#121213, #121213), linear-gradient(#121213 50%, rgba(18, 18, 19, 0.6) 80%, rgba(18, 18, 19, 0)),  linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
+      flex-direction: column;
+      align-items: center;
+      gap: 1.1rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      padding: 0.4rem 1rem;
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      animation: fadeUp 0.7s 0.2s forwards;
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+    @keyframes dotPulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.4; transform:scale(1.4); }
+    }
+
+    .hero-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 9vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+    }
+    .hero-heading .row { display: block; overflow: hidden; }
+    .hero-heading .row span {
+      display: block;
+      opacity: 0;
+      transform: translateY(55px);
+      animation: rowUp 0.85s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-heading .row:nth-child(1) span { animation-delay: 0.35s; }
+    .hero-heading .row:nth-child(2) span { animation-delay: 0.5s; }
+
+    .grad-text {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--pink) 55%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--fg-muted);
+      max-width: 360px;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.75s forwards;
+    }
+
+    /* resume button */
+    .btn-resume {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #f3f3f3;
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 2px solid transparent;
+      border-radius: 100px;
+      padding: 0.7rem 1.8rem;
+      cursor: none;
+      background:
+        linear-gradient(#121213, #121213),
+        linear-gradient(#121213 50%, rgba(18,18,19,0.5) 80%, rgba(18,18,19,0)),
+        linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
       background-origin: border-box;
       background-clip: padding-box, border-box, border-box;
       background-size: 200%;
-      animation: animate 2s infinite linear;
-      text-decoration: none;
-      font-weight: bold;
-      text-align: center;
+      animation: gradShift 2s linear infinite;
+      transition: transform 0.3s ease;
+      margin-top: 0.3rem;
+      opacity: 0;
     }
-
-    .resume-button::before {
+    .btn-resume.visible { opacity: 1; }
+    .btn-resume::before {
       content: '';
-      background: linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
-      height: 30%;
-      width: 60%;
       position: absolute;
-      bottom: -20%;
-      z-index: -5;
+      bottom: -18%; left: 20%;
+      width: 60%; height: 35%;
+      background: linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
       background-size: 200%;
-      animation: animate 2s infinite linear;
-      filter: blur(calc(0.8 * var(--m)));
+      animation: gradShift 2s linear infinite;
+      filter: blur(14px);
+      z-index: -1;
+    }
+    .btn-resume:hover { transform: translateY(-3px); }
+    .btn-resume:hover,
+    .btn-resume:hover::before { animation-duration: 0.5s; }
+    @keyframes gradShift {
+      from { background-position: 0; }
+      to   { background-position: 200%; }
     }
 
-    .resume-button:hover, .resume-button:hover::before {
-      animation: animate 0.5s infinite linear;
-    }
-
-    @keyframes animate {
-      0% {background-position: 0}
-      100% {background-position: 200%}
-    }
-
-    /* ===============================
-       PROJECTS SECTION (UPDATED WITH CTA BUTTONS)
-    ================================ */
-    .portfolio-section {
-      position: relative;
+    /* scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
       z-index: 2;
-      background: transparent;
-      color: var(--text-current);
-      padding: 80px 20px;
-      transition: color var(--transition);
+      opacity: 0;
+      animation: fadeUp 0.7s 1.3s forwards;
+    }
+    .scroll-line {
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollAnim 2s ease-in-out infinite;
+    }
+    @keyframes scrollAnim {
+      0%   { transform:scaleY(0); transform-origin:top; opacity:0; }
+      45%  { transform:scaleY(1); transform-origin:top; opacity:1; }
+      55%  { transform:scaleY(1); transform-origin:bottom; }
+      100% { transform:scaleY(0); transform-origin:bottom; opacity:0; }
     }
 
-    .portfolio-container {
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(18px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes rowUp {
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    /* =====================
+       SCROLL REVEAL
+    ===================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.in { opacity:1; transform:translateY(0); }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+
+    /* =====================
+       MARQUEE
+    ===================== */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1.6rem 0;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 2.5rem;
+      width: max-content;
+      animation: mscroll 22s linear infinite;
+    }
+    .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+    .marquee-item {
+      display: flex; align-items: center; gap: 0.8rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--fg-muted); white-space: nowrap;
+      transition: color 0.3s;
+    }
+    .marquee-item:hover { color: var(--accent); }
+    .m-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    @keyframes mscroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* =====================
+       PROJECTS
+    ===================== */
+    .projects {
+      padding: 90px 2.5rem;
+    }
+    .sec-head {
+      max-width: 1200px;
+      margin: 0 auto 52px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .sec-eyebrow {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.65rem;
+    }
+    .sec-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.9rem, 4.5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.05;
+    }
+    .sec-num {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(4rem, 9vw, 7.5rem);
+      font-weight: 800;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--card-border);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      user-select: none;
+    }
+
+    .grid {
       max-width: 1200px;
       margin: 0 auto;
-      text-align: center;
-    }
-
-    .portfolio-tag {
-      font-size: 12px;
-      letter-spacing: 2px;
-      color: #8300fd;
-      font-weight: bold;
-      display: block;
-      margin-bottom: 16px;
-    }
-
-    .portfolio-title {
-      font-size: 42px;
-      margin: 0 0 50px;
-      line-height: 1.2;
-      font-weight: 700;
-      color: var(--text-current);
-    }
-
-    .portfolio-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 40px;
-      margin-top: 30px;
+      gap: 26px;
     }
 
-    .project-card {
-      background: transparent;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      border-radius: 12px;
+    .card {
+      border-radius: 18px;
       overflow: hidden;
-      transition: all 0.3s ease;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(16px);
+      transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94),
+                  box-shadow 0.45s ease,
+                  border-color 0.3s;
+      cursor: none;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.008);
+      border-color: rgba(131,0,253,0.22);
+      box-shadow: 0 24px 50px rgba(0,0,0,0.1);
+    }
+    [data-theme="dark"] .card:hover {
+      box-shadow: 0 24px 50px rgba(0,0,0,0.45);
+    }
+
+    .card-img {
       position: relative;
+      height: 250px;
+      overflow: hidden;
+    }
+    .card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.65s ease;
+    }
+    .card:hover .card-img img { transform: scale(1.07); }
+
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 35%, rgba(131,0,253,0.55));
+      opacity: 0;
+      transition: opacity 0.4s;
+      display: flex; align-items: flex-end; padding: 1.2rem;
+    }
+    .card:hover .card-overlay { opacity: 1; }
+    .overlay-lbl {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      color: #fff;
+      transform: translateY(8px);
+      transition: transform 0.4s;
+    }
+    .card:hover .overlay-lbl { transform: translateY(0); }
+
+    .cs-img {
+      height: 250px;
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent) 7%, var(--bg)),
+        color-mix(in srgb, var(--pink) 7%, var(--bg)));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; opacity: 0.25;
+      animation: floatGlyph 4s ease-in-out infinite;
+    }
+    @keyframes floatGlyph {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
     }
 
-    /* Dark mode border adjustment */
-    :has(#theme-toggle:checked) .project-card {
-      border-color: rgba(255, 255, 255, 0.15);
+    .card-body { padding: 22px 26px 26px; }
+    .card-tag {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.5rem;
     }
-
-    .project-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem; font-weight: 700;
+      letter-spacing: -0.02em; line-height: 1.3;
+      color: var(--fg); margin-bottom: 0.55rem;
     }
-
-    :has(#theme-toggle:checked) .project-card:hover {
-      box-shadow: 0 20px 40px rgba(255, 255, 255, 0.05);
+    .card-desc {
+      font-size: 0.86rem; color: var(--fg-muted);
+      line-height: 1.65; margin-bottom: 1.4rem;
     }
-
-    .project-card img {
-      width: 100%;
-      height: 260px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .project-content {
-      text-align: left;
-      padding: 24px;
-      background: transparent;
-    }
-
-    .project-content h3 {
-      font-size: 20px;
-      margin-bottom: 12px;
-      color: var(--text-current);
-      font-weight: 600;
-    }
-
-    .project-content p {
-      font-size: 14px;
-      color: var(--text-current);
-      opacity: 0.8;
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
-
-    /* Updated CTA Buttons */
-    .project-cta-buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .cta-button {
-      flex: 1;
-      padding: 12px 16px;
-      font-size: 14px;
-      font-weight: 500;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .cta-primary {
-      background: var(--text-current);
-      color: var(--stripe-color);
-    }
-
-    .cta-secondary {
-      background: transparent;
-      color: var(--text-current);
-      border: 1.5px solid var(--text-current);
-    }
-
-    .cta-button:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
-    }
-
-    /* ===============================
-       FOOTER SECTION (TRANSPARENT)
-    ================================ */
-
-    .footer-section {
-      position: relative;
-      color: var(--text-current);
-      padding: 3rem 2rem 2rem;
-      text-align: center;
-      z-index: 1;
-      transition: color var(--transition);
-      background: transparent !important;
-    }
-
-    .footer-content {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .footer-text {
-      font-size: 1.1rem;
-      line-height: 1.6;
+    .cs-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      border-radius: 100px;
+      padding: 3px 11px;
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
       margin-bottom: 0.5rem;
-      opacity: 0.9;
+    }
+    .cs-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%; background: var(--accent);
+      animation: dotPulse 1.5s ease-in-out infinite;
     }
 
-    /* Email with shaky animation */
-    @keyframes shaky {
-      0%, 100% { transform: translateX(0); }
-      10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-      20%, 40%, 60%, 80% { transform: translateX(2px); }
+    .card-btns { display: flex; gap: 9px; }
+    .cbtn {
+      flex: 1; padding: 10px 14px;
+      font-size: 13px; font-weight: 600;
+      font-family: 'Syne', sans-serif;
+      border-radius: 9px;
+      text-decoration: none; text-align: center;
+      cursor: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      transition: all 0.28s ease;
     }
-
-    .footer-email {
-      font-size: 32px; /* 32px text size */
-      font-weight: 600;
-      margin-bottom: 2rem;
-      color: var(--text-current);
-      text-decoration: none;
-      transition: all 0.3s ease;
-      display: inline-block;
-      animation: shaky 3s ease-in-out infinite;
+    .cbtn-primary {
+      background: var(--fg); color: var(--bg);
+      border: 1.5px solid var(--fg);
     }
-
-    .footer-email:hover {
-      animation: shaky 0.5s ease-in-out infinite;
-      opacity: 0.9;
+    .cbtn-primary:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+    .cbtn-secondary {
+      background: transparent; color: var(--fg);
+      border: 1.5px solid var(--card-border);
     }
+    .cbtn-secondary:hover { border-color: var(--fg); transform: translateY(-2px); }
 
-    .social-icons {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-top: 1.5rem;
+    /* =====================
+       FOOTER
+    ===================== */
+    footer {
+      position: relative;
+      padding: 90px 2.5rem 3.5rem;
+      text-align: center;
+      overflow: hidden;
     }
-
-    .social-icon {
-      width: 44px;
-      height: 44px;
+    .foot-orb {
+      position: absolute;
+      width: 550px; height: 550px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-current);
+      background: radial-gradient(circle, rgba(131,0,253,0.05), transparent 65%);
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .foot-inner { position: relative; max-width: 680px; margin: 0 auto; }
+    .foot-label {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--fg-muted); margin-bottom: 1.2rem;
+    }
+    .foot-cta {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.9rem, 5.5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.06;
+      margin-bottom: 2.2rem;
+    }
+    .foot-email {
+      display: inline-block;
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(0.95rem, 2.6vw, 1.45rem);
+      font-weight: 700;
+      color: var(--fg);
       text-decoration: none;
-      font-size: 1.2rem;
-      transition: all 0.3s ease;
-      border: 1.5px solid currentColor;
-      background: transparent !important;
+      letter-spacing: -0.01em;
+      position: relative;
+      padding-bottom: 3px;
+      margin-bottom: 2.5rem;
+      cursor: none;
+      animation: shaky 3.5s ease-in-out infinite;
+      transition: color 0.3s;
+    }
+    .foot-email::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 1.5px;
+      background: linear-gradient(90deg, var(--accent), var(--pink));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .foot-email:hover { color: var(--accent); animation-duration: 0.5s; }
+    .foot-email:hover::after { transform: scaleX(1); }
+    @keyframes shaky {
+      0%,100% { transform:translateX(0); }
+      20%      { transform:translateX(-2px); }
+      40%      { transform:translateX(2px); }
+      60%      { transform:translateX(-1.5px); }
+      80%      { transform:translateX(1.5px); }
     }
 
-    .social-icon:hover {
+    .socials {
+      display: flex; justify-content: center; gap: 0.9rem;
+      margin-top: 1.8rem;
+    }
+    .soc-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--card-border);
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      color: var(--fg-muted);
+      font-size: 1rem;
+      text-decoration: none;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.32s cubic-bezier(0.25,0.46,0.45,0.94);
+      cursor: none;
+    }
+    .soc-btn:hover {
       transform: translateY(-5px);
-      color: var(--text-current);
+      border-color: var(--accent); color: var(--accent);
+      box-shadow: 0 8px 24px rgba(131,0,253,0.18);
     }
 
-    /* ===============================
-       DARK MODE
-    ================================ */
-
-    :has(#theme-toggle:checked) {
-      --stripe-color: #000;
-      --text-current: var(--text-light);
+    .foot-divider { height: 1px; background: var(--card-border); margin: 2.5rem 0 1.8rem; }
+    .foot-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      max-width: 1200px; margin: 0 auto;
+      font-size: 0.78rem; color: var(--fg-muted);
+      padding: 0 2.5rem;
     }
 
-    :has(#theme-toggle:checked) .icon-sun {
-      display: none;
+    /* =====================
+       TOAST
+    ===================== */
+    #toast {
+      position: fixed;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(14px);
+      background: #0d0d0d; color: #fff;
+      padding: 0.55rem 1.2rem;
+      border-radius: 100px;
+      font-size: 0.82rem; font-weight: 500;
+      display: flex; align-items: center; gap: 0.4rem;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 9999;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.22);
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* =====================
+       RESPONSIVE
+    ===================== */
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      .sec-head { flex-direction: column; align-items: flex-start; }
+      .foot-bottom { flex-direction: column; gap: 0.4rem; text-align: center; padding: 0; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 0.8rem 1.2rem; gap: 1.2rem; }
+      .nav-links { gap: 1.2rem; }
+      .projects { padding: 70px 1.2rem; }
+      footer { padding: 70px 1.2rem 2.5rem; }
+      .card-btns { flex-direction: column; }
     }
 
-    :has(#theme-toggle:checked) .icon-moon {
-      display: block;
-    }
-
-    :has(#theme-toggle:checked) .hero,
-    :has(#theme-toggle:checked) .hero::after {
-      filter: blur(10px) opacity(55%) saturate(200%);
-    }
-
-    /* ===============================
-       RESPONSIVE ADJUSTMENTS
-    ================================ */
-
-    @media screen and (max-width: 1000px) {
-      :root {
-        --m: 1.1rem;
-      }
-      
-      .resume-button {
-        font-size: 18px;
-      }
-      
-      .portfolio-grid {
-        gap: 30px;
-      }
-      
-      .project-card img {
-        height: 220px;
-      }
-    }
-
-    @media screen and (max-width: 768px) {
-      .theme-switch {
-        top: 1rem;
-        right: 1rem;
-      }
-      
-      .h1--scalingSize {
-        font-size: clamp(1.8rem, 7vw, 3.5rem);
-      }
-      
-      /* Projects section responsive */
-      .portfolio-section {
-        padding: 60px 20px;
-      }
-      
-      .portfolio-title {
-        font-size: 32px;
-        margin-bottom: 40px;
-      }
-      
-      .portfolio-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-      }
-      
-      .project-card img {
-        height: 200px;
-      }
-      
-      .project-cta-buttons {
-        flex-direction: column;
-        gap: 10px;
-      }
-      
-      .cta-button {
-        width: 100%;
-      }
-      
-      /* Footer responsive */
-      .footer-section {
-        padding: 2.5rem 1.5rem 1.5rem;
-      }
-      
-      .footer-text {
-        font-size: 1rem;
-      }
-      
-      .footer-email {
-        font-size: 24px;
-        animation: shaky 4s ease-in-out infinite;
-      }
-      
-      .footer-email:hover {
-        animation: shaky 0.6s ease-in-out infinite;
-      }
-      
-      .social-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1.1rem;
-      }
-      
-      .resume-button {
-        font-size: 16px;
-      }
-    }
-
-    @media screen and (max-width: 480px) {
-      :root {
-        --m: 1rem;
-      }
-      
-      .portfolio-title {
-        font-size: 28px;
-      }
-      
-      .project-content {
-        padding: 20px;
-      }
-      
-      .project-content h3 {
-        font-size: 18px;
-      }
-      
-      .social-icons {
-        gap: 1rem;
-      }
-      
-      .social-icon {
-        width: 38px;
-        height: 38px;
-        font-size: 1rem;
-      }
-      
-      .footer-email {
-        font-size: 20px;
-      }
-      
-      .resume-button {
-        font-size: 14px;
-        padding: 12px 24px;
-      }
-    }
   </style>
 </head>
 <body>
 
-<!-- Theme Toggle Button -->
-<input type="checkbox" id="theme-toggle" />
-<label for="theme-toggle" class="theme-switch" aria-label="Toggle theme">
-  <!-- Sun (outline) -->
-  <svg class="icon-sun" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="5"></circle>
-    <line x1="12" y1="1" x2="12" y2="4"></line>
-    <line x1="12" y1="20" x2="12" y2="23"></line>
-    <line x1="1" y1="12" x2="4" y2="12"></line>
-    <line x1="20" y1="12" x2="23" y2="12"></line>
-    <line x1="4.2" y1="4.2" x2="6.3" y2="6.3"></line>
-    <line x1="17.7" y1="17.7" x2="19.8" y2="19.8"></line>
-    <line x1="4.2" y1="19.8" x2="6.3" y2="17.7"></line>
-    <line x1="17.7" y1="6.3" x2="19.8" y2="4.2"></line>
-  </svg>
+<!-- cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
 
-  <!-- Moon (outline) -->
-  <svg class="icon-moon" viewBox="0 0 24 24">
-    <path d="M21 12.8A9 9 0 1 1 11.2 3
-             7 7 0 0 0 21 12.8z"></path>
-  </svg>
-</label>
+<!-- scroll progress -->
+<div id="scroll-bar"></div>
 
-<section class="wrapper">
-  <div class="hero" aria-hidden="true"></div>
+<!-- toast -->
+<div id="toast">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg>
+  Email copied!
+</div>
 
-  <div class="content">
-    <span class="hero-eyebrow">Hi, I'm Foysal</span>
+<!-- =====================
+     NAVBAR
+===================== -->
+<nav id="navbar">
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+    <svg class="icon-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1"  x2="12" y2="4"/>
+      <line x1="12" y1="20" x2="12" y2="23"/>
+      <line x1="1"  y1="12" x2="4"  y2="12"/>
+      <line x1="20" y1="12" x2="23" y2="12"/>
+      <line x1="4.2"  y1="4.2"  x2="6.3"  y2="6.3"/>
+      <line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/>
+      <line x1="4.2"  y1="19.8" x2="6.3"  y2="17.7"/>
+      <line x1="17.7" y1="6.3"  x2="19.8" y2="4.2"/>
+    </svg>
+    <svg class="icon-moon" viewBox="0 0 24 24">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>
+    </svg>
+  </button>
+</nav>
 
-    <h1 class="h1--scalingSize">
-      UI/UX Designer
+<!-- =====================
+     HERO
+===================== -->
+<section class="hero">
+  <div class="aurora" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Hi, I'm Foysal
+    </div>
+
+    <h1 class="hero-heading">
+      <span class="row"><span>UI/UX</span></span>
+      <span class="row"><span class="grad-text">Designer</span></span>
     </h1>
 
-    <!-- Resume Button -->
-    <div class="resume-button-container">
-      <a href="Foysal Hasan.pdf" target="_blank" class="resume-button">
-        Resume Download
-      </a>
-    </div>
+    <p class="hero-sub">
+      Crafting digital experiences that feel intuitive, elegant, and unforgettable.
+    </p>
+
+    <a href="Foysal Hasan.pdf" target="_blank" class="btn-resume" id="resumeBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7,10 12,15 17,10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Resume Download
+    </a>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
   </div>
 </section>
 
-<!-- ===============================
-   PROJECTS SECTION (UPDATED WITH CTA BUTTONS)
-=============================== -->
-
-<section class="portfolio-section">
-  <div class="portfolio-container">
-    <span class="portfolio-tag">MY PORTFOLIO</span>
-    <h1 class="portfolio-title">Latest Projects</h1>
-
-<div class="portfolio-grid">
-  <!-- Project 1 - Dental Landing Page -->
-  <div class="project-card">
-    <img src="Dental Services.jpg" alt="Dental Services Landing Page UI Design">
-    <div class="project-content">
-      <h3>Dental Services Landing Page UI Design</h3>
-      <p>
-        A modern and responsive dental clinic landing page designed to build trust, improve user experience, and increase appointment conversions.
-      </p>
-      <div class="project-cta-buttons">
-        <a href="https://thefoysalhasan.github.io/brightsmile.github.io/" target="_blank" class="cta-button cta-primary">Live Preview</a>
-        <a href="https://www.behance.net/gallery/243571695/Dental-Services-Landing-Page-UI-Design" target="_blank" class="cta-button cta-secondary">View Project</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Project 2 --->
-  <div class="project-card">
-    <img src="cooming soon.jpg" alt="E-commerce Mobile App">
-    <div class="project-content">
-      <h3>Cooming Soon</h3>
-      <p>
-        Cooming Soon
-      </p>
-      <div class="project-cta-buttons">
-        <a href="link here" target="_blank" class="cta-button cta-primary">Live Preview</a>
-        <a href="link here" target="_blank" class="cta-button cta-secondary">View Project</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Project 3 --->
-  <div class="project-card">
-    <img src="cooming soon.jpg" alt="SaaS Dashboard Interface">
-    <div class="project-content">
-      <h3>Cooming Soon</h3>
-      <p>
-        Cooming Soon
-      </p>
-      <div class="project-cta-buttons">
-        <a href="link here" target="_blank" class="cta-button cta-primary">Live Preview</a>
-        <a href="link here" target="_blank" class="cta-button cta-secondary">View Project</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Project 4 --->
-  <div class="project-card">
-    <img src="cooming soon.jpg" alt="Design System">
-    <div class="project-content">
-      <h3>Cooming Soon</h3>
-      <p>
-        Cooming Soon
-      </p>
-      <div class="project-cta-buttons">
-        <a href="link here" target="_blank" class="cta-button cta-primary">Live Preview</a>
-        <a href="link here" target="_blank" class="cta-button cta-secondary">View Project</a>
-      </div>
-    </div>
+<!-- =====================
+     MARQUEE
+===================== -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="m-dot"></span>UI Design</div>
+    <div class="marquee-item"><span class="m-dot"></span>UX Research</div>
+    <div class="marquee-item"><span class="m-dot"></span>Figma</div>
+    <div class="marquee-item"><span class="m-dot"></span>Prototyping</div>
+    <div class="marquee-item"><span class="m-dot"></span>Design Systems</div>
+    <div class="marquee-item"><span class="m-dot"></span>Web Design</div>
+    <div class="marquee-item"><span class="m-dot"></span>Mobile Design</div>
+    <div class="marquee-item"><span class="m-dot"></span>Brand Identity</div>
+    <div class="marquee-item"><span class="m-dot"></span>UI Design</div>
+    <div class="marquee-item"><span class="m-dot"></span>UX Research</div>
+    <div class="marquee-item"><span class="m-dot"></span>Figma</div>
+    <div class="marquee-item"><span class="m-dot"></span>Prototyping</div>
+    <div class="marquee-item"><span class="m-dot"></span>Design Systems</div>
+    <div class="marquee-item"><span class="m-dot"></span>Web Design</div>
+    <div class="marquee-item"><span class="m-dot"></span>Mobile Design</div>
+    <div class="marquee-item"><span class="m-dot"></span>Brand Identity</div>
   </div>
 </div>
-</section>
 
-<!-- Footer Section -->
-<section class="footer-section">
-  <div class="footer-content">
-    <p class="footer-text">Have an idea or just want to connect?</p>
-    <a href="mailto:foysalhasan12780@gmail.com" class="footer-email">foysalhasan12780@gmail.com</a>
-    
-    <div class="social-icons">
-      <a href="https://linkedin.com/in/thefoysalhasan" target="_blank" class="social-icon" aria-label="LinkedIn">
-        <i class="fab fa-linkedin-in"></i>
-      </a>
-      <a href="https://instagram.com/thefoysalhasan" target="_blank" class="social-icon" aria-label="Instagram">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="https://behance.net/thefoysalhasan" target="_blank" class="social-icon" aria-label="Behance">
-        <i class="fab fa-behance"></i>
-      </a>
-      <a href="https://dribbble.com/thefoysalhasan" target="_blank" class="social-icon" aria-label="Dribbble">
-        <i class="fab fa-dribbble"></i>
-      </a>
+<!-- =====================
+     PROJECTS
+===================== -->
+<section class="projects" id="projects">
+  <div class="sec-head reveal">
+    <div>
+      <p class="sec-eyebrow">Selected Work</p>
+      <h2 class="sec-title">Latest<br>Projects</h2>
     </div>
+    <div class="sec-num" aria-hidden="true">04</div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Card 1 -->
+    <div class="card reveal">
+      <div class="card-img">
+        <img src="Dental Services.jpg" alt="Dental Services Landing Page">
+        <div class="card-overlay">
+          <span class="overlay-lbl">View Case Study →</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Landing Page · Web Design</div>
+        <h3 class="card-title">Dental Services Landing Page UI Design</h3>
+        <p class="card-desc">A modern and responsive dental clinic landing page designed to build trust, improve user experience, and increase appointment conversions.</p>
+        <div class="card-btns">
+          <a href="https://thefoysalhasan.github.io/brightsmile.github.io/" target="_blank" class="cbtn cbtn-primary">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Live Preview
+          </a>
+          <a href="https://www.behance.net/gallery/243571695/Dental-Services-Landing-Page-UI-Design" target="_blank" class="cbtn cbtn-secondary">View Project</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card reveal d1">
+      <div class="cs-img">✦</div>
+      <div class="card-body">
+        <div class="cs-badge"><span class="cs-dot"></span>Coming Soon</div>
+        <h3 class="card-title">Coming Soon</h3>
+        <p class="card-desc">Something exciting is in the works. Stay tuned for a fresh UI/UX case study dropping soon.</p>
+        <div class="card-btns">
+          <a href="#contact" class="cbtn cbtn-primary">Get Notified</a>
+          <a href="https://behance.net/thefoysalhasan" target="_blank" class="cbtn cbtn-secondary">See Profile</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card reveal d2">
+      <div class="cs-img">◆</div>
+      <div class="card-body">
+        <div class="cs-badge"><span class="cs-dot"></span>Coming Soon</div>
+        <h3 class="card-title">Coming Soon</h3>
+        <p class="card-desc">A new challenge in design is underway. Crafting pixels with purpose — details incoming.</p>
+        <div class="card-btns">
+          <a href="#contact" class="cbtn cbtn-primary">Get Notified</a>
+          <a href="https://behance.net/thefoysalhasan" target="_blank" class="cbtn cbtn-secondary">See Profile</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card reveal d3">
+      <div class="cs-img">⬡</div>
+      <div class="card-body">
+        <div class="cs-badge"><span class="cs-dot"></span>Coming Soon</div>
+        <h3 class="card-title">Coming Soon</h3>
+        <p class="card-desc">Great design takes time. This case study is in progress — expect something worth the wait.</p>
+        <div class="card-btns">
+          <a href="#contact" class="cbtn cbtn-primary">Get Notified</a>
+          <a href="https://behance.net/thefoysalhasan" target="_blank" class="cbtn cbtn-secondary">See Profile</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
+<!-- =====================
+     FOOTER
+===================== -->
+<footer id="contact">
+  <div class="foot-orb"></div>
+  <div class="foot-inner">
+    <p class="foot-label reveal">Let's collaborate</p>
+    <h2 class="foot-cta reveal d1">
+      Have an idea or just<br>want to connect?<br>
+      <span class="grad-text">Let's talk.</span>
+    </h2>
+
+    <br>
+
+    <span class="foot-email reveal d2" id="emailBtn" role="button" tabindex="0">
+      foysalhasan12780@gmail.com
+    </span>
+
+    <div class="socials reveal d3">
+      <a href="https://linkedin.com/in/thefoysalhasan"  target="_blank" class="soc-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://instagram.com/thefoysalhasan"    target="_blank" class="soc-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://behance.net/thefoysalhasan"      target="_blank" class="soc-btn" aria-label="Behance"><i class="fab fa-behance"></i></a>
+      <a href="https://dribbble.com/thefoysalhasan"     target="_blank" class="soc-btn" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+    </div>
+  </div>
+
+  <div class="foot-divider"></div>
+  <div class="foot-bottom">
+    <span>© 2025 Foysal Hasan. All rights reserved.</span>
+    <span>UI/UX Designer · Dhaka, Bangladesh</span>
+  </div>
+</footer>
+
 <script>
-// ===============================
-// JAVASCRIPT CODE
-// ===============================
+/* =====================
+   CUSTOM CURSOR
+===================== */
+const cur  = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
 
-// 1. THEME TOGGLE FUNCTIONALITY
-const themeToggle = document.getElementById('theme-toggle');
-
-// Check for saved theme preference
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') {
-  themeToggle.checked = true;
-} else if (savedTheme === 'light') {
-  themeToggle.checked = false;
-} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  themeToggle.checked = true;
-}
-
-// Save theme preference
-themeToggle.addEventListener('change', function() {
-  if (this.checked) {
-    localStorage.setItem('theme', 'dark');
-  } else {
-    localStorage.setItem('theme', 'light');
-  }
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px';
+  cur.style.top  = my + 'px';
+});
+(function raf() {
+  rx += (mx - rx) * 0.13;
+  ry += (my - ry) * 0.13;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(raf);
+})();
+document.querySelectorAll('a, button, .card, [role="button"]').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
 });
 
-// 2. SMOOTH SCROLLING FOR ANCHOR LINKS
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    const targetId = this.getAttribute('href');
-    if(targetId === '#') return;
-    
-    const targetElement = document.querySelector(targetId);
-    if(targetElement) {
-      window.scrollTo({
-        top: targetElement.offsetTop - 80,
-        behavior: 'smooth'
-      });
+/* =====================
+   SCROLL PROGRESS
+===================== */
+const bar = document.getElementById('scroll-bar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  bar.style.width = pct + '%';
+}, { passive: true });
+
+/* =====================
+   STICKY NAV
+===================== */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+/* =====================
+   THEME TOGGLE
+===================== */
+const themeBtn = document.getElementById('themeBtn');
+const root = document.documentElement;
+
+const saved = localStorage.getItem('theme');
+if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  root.setAttribute('data-theme', 'dark');
+}
+themeBtn.addEventListener('click', () => {
+  const dark = root.getAttribute('data-theme') === 'dark';
+  root.setAttribute('data-theme', dark ? 'light' : 'dark');
+  localStorage.setItem('theme', dark ? 'light' : 'dark');
+});
+
+/* =====================
+   SCROLL REVEAL
+===================== */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* =====================
+   RESUME BUTTON FADE IN
+===================== */
+const resumeBtn = document.getElementById('resumeBtn');
+setTimeout(() => { resumeBtn.classList.add('visible'); }, 950);
+
+/* =====================
+   EMAIL COPY TO CLIPBOARD
+===================== */
+const emailBtn = document.getElementById('emailBtn');
+const toast    = document.getElementById('toast');
+const EMAIL    = 'foysalhasan12780@gmail.com';
+let toastTimer;
+
+function copyEmail() {
+  navigator.clipboard.writeText(EMAIL).then(() => {
+    clearTimeout(toastTimer);
+    toast.classList.add('show');
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+  });
+}
+emailBtn.addEventListener('click', copyEmail);
+emailBtn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') copyEmail(); });
+
+/* =====================
+   MAGNETIC BUTTONS
+===================== */
+document.querySelectorAll('.soc-btn, .theme-btn').forEach(el => {
+  el.addEventListener('mousemove', e => {
+    const r  = el.getBoundingClientRect();
+    const dx = (e.clientX - (r.left + r.width  / 2)) * 0.38;
+    const dy = (e.clientY - (r.top  + r.height / 2)) * 0.38;
+    el.style.transform = `translate(${dx}px, ${dy}px)`;
+  });
+  el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+});
+
+/* =====================
+   SMOOTH ANCHOR SCROLL
+===================== */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (!id || id === '#') return;
+    const target = document.querySelector(id);
+    if (target) {
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
     }
   });
 });
 
-// 3. ADD HOVER EFFECT TO RESUME BUTTON
-const resumeButton = document.querySelector('.resume-button');
-if (resumeButton) {
-  resumeButton.addEventListener('mouseenter', () => {
-    resumeButton.style.transform = 'translateY(-3px)';
-  });
-  
-  resumeButton.addEventListener('mouseleave', () => {
-    resumeButton.style.transform = 'translateY(0)';
-  });
-}
-
-  // 4. ADD HOVER EFFECT TO RESUME BUTTON
-  const resumeButton = document.querySelector('.resume-button');
-  if (resumeButton) {
-    resumeButton.addEventListener('mouseenter', () => {
-      resumeButton.style.transform = 'translateY(-3px)';
-    });
-    
-    resumeButton.addEventListener('mouseleave', () => {
-      resumeButton.style.transform = 'translateY(0)';
-    });
-  }
-
-  // 5. PERFORMANCE OPTIMIZATION
-  let scrollTimer;
-  window.addEventListener('scroll', () => {
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => {
-      // Any scroll-based functionality can go here
-    }, 100);
-  });
-
-  // 6. ERROR HANDLING
-  window.addEventListener('error', (event) => {
-    console.log('JavaScript Error:', event.message);
-  });
-
-  // 7. RESPONSIVE BEHAVIOR
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      // Any responsive adjustments can go here
-    }, 250);
-  });
-
-  // 8. VISIBILITY CHANGE HANDLER
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      // Pause any animations if needed in the future
-    } else {
-      // Resume any animations if needed in the future
-    }
-  });
+/* =====================
+   PAGE FADE IN
+===================== */
+document.body.style.opacity = '0';
+window.addEventListener('load', () => {
+  document.body.style.transition = 'opacity 0.45s ease';
+  document.body.style.opacity = '1';
+});
 </script>
-
 </body>
 </html>
